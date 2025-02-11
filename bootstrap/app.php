@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ])->validateCsrfTokens([
             'products/*',
             'categories/*',
+            'partners/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

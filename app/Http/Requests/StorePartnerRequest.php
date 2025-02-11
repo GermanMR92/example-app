@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreCategoryRequest extends FormRequest
+class StorePartnerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,13 +19,15 @@ class StoreCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The category name is required.',
-            'name.string' => 'The category name must be a valid text.',
-            'name.min' => 'The category name must have at least :min characters.',
-            'name.max' => 'The category name cannot exceed :max characters.',
+            'name.required' => 'The partner name is required',
+            'name.string' => 'The partner name must be a valid text',
+            'name.min' => 'The partner name must have at least :min characters',
+            'name.max' => 'The partner name cannot exceed :max characters',
 
-            'description.string' => 'The description must be valid text.',
-            'description.max' => 'The description cannot exceed :max characters.',
+            'email.required' => 'The email is required',
+            'email.email' => 'The email must be a valid email address',
+            'email.max' => 'The email cannot exceed :max characters',
+            'email.unique' => 'This email is already taken',
         ];
     }
 
@@ -37,8 +39,8 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:5|max:50',
-            'description' => 'nullable|string|max:255',
+            'name' => 'required|string|min:3|max:50',
+            'email' => 'required|email|max:255|unique:partners,email',
         ];
     }
 

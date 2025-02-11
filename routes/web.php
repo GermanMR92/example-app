@@ -25,3 +25,11 @@ Route::prefix('categories')->group(function () {
     // Route::get('/edit/{id}', [CategoryController::class, 'edit']);
     Route::delete('destroy/{id}', [CategoryController::class, 'destroy']);
 });
+
+Route::prefix('partners')->group(function () {
+    // Route::get('/new', [PartnerController::class, 'new']);
+    Route::post('/store', [PartnerController::class, 'store']);
+    Route::post('/update/{id}', [PartnerController::class, 'update']);
+    // Route::get('/edit/{id}', [PartnerController::class, 'edit']);
+    Route::delete('destroy/{id}', [PartnerController::class, 'destroy']);
+});
