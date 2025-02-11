@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'products/*',
             'categories/*',
             'partners/*',
+            'groups/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

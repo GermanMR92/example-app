@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupCategoryController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,12 @@ Route::prefix('partners')->group(function () {
     Route::post('/update/{id}', [PartnerController::class, 'update']);
     // Route::get('/edit/{id}', [PartnerController::class, 'edit']);
     Route::delete('destroy/{id}', [PartnerController::class, 'destroy']);
+});
+
+Route::prefix('groups')->group(function () {
+    // Route::get('/new', [GroupCategoryController::class, 'new']);
+    Route::post('/store', [GroupCategoryController::class, 'store']);
+    Route::post('/update/{id}', [GroupCategoryController::class, 'update']);
+    // Route::get('/edit/{id}', [GroupCategoryController::class, 'edit']);
+    Route::delete('destroy/{id}', [GroupCategoryController::class, 'destroy']);
 });
