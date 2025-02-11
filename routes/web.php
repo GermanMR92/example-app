@@ -17,3 +17,11 @@ Route::prefix('products')->group(function () {
     // Route::get('/edit/{id}', [ProductController::class, 'edit']);
     Route::delete('destroy/{id}', [ProductController::class, 'destroy']);
 });
+
+Route::prefix('categories')->group(function () {
+    // Route::get('/new', [CategoryController::class, 'new']);
+    Route::post('/store', [CategoryController::class, 'store']);
+    Route::post('/update/{id}', [CategoryController::class, 'update']);
+    // Route::get('/edit/{id}', [CategoryController::class, 'edit']);
+    Route::delete('destroy/{id}', [CategoryController::class, 'destroy']);
+});

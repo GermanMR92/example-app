@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
         ])->validateCsrfTokens([
             'products/*',
+            'categories/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
