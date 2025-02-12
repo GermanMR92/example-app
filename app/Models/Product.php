@@ -15,4 +15,9 @@ class Product extends Model
         'image_url',
         'cta_url'
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_has_category');
+    }
 }

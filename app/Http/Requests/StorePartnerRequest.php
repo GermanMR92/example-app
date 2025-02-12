@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StorePartnerRequest extends FormRequest
 {
@@ -40,7 +41,12 @@ class StorePartnerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:50',
-            'email' => 'required|email|max:255|unique:partners,email',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('partners', 'email')->ignore($this->route('id')), // ignore the current partner
+            ],
         ];
     }
 

@@ -10,45 +10,72 @@ class CategoryController extends Controller
 {
     function store(StoreCategoryRequest $request)
     {
-        $category = new Category();
-        $fields = $request->only($category->getFillable());
+        try {
+            $category = new Category();
 
-        $category->fill($fields);
-        $category->save();
+            $fields = $request->only($category->getFillable());
+            $category->fill($fields);
 
-        return response()->json([
-            'message' => 'Category created',
-            'category' => $category
-        ]);
+            $category->save();
+
+            return response()->json([
+                'message' => 'Category created',
+                'category' => $category
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while creating the category',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
     function update(StoreCategoryRequest $request, $id)
     {
-        $category = Category::find($id);
+        try {
+            $category = Category::findOrFail($id);
 
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
+            if (!$category) {
+                return response()->json(['error' => 'Category not found'], 404);
+            }
+
+            $fields = $request->only($category->getFillable());
+            $category->fill($fields);
+
+            $category->update();
+
+            return response()->json([
+                'message' => 'category updated',
+                'category' => $category
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while creating the category',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $fields = $request->only($category->getFillable());
-        $category->fill($fields);
-        $category->update();
-
-        return response()->json([
-            'message' => 'category updated',
-            'category' => $category
-        ]);
     }
 
     function destroy($id)
     {
-        $category = Category::find($id);
+        try {
+            $category = Category::find($id);
 
-        if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
+            if (!$category) {
+                return response()->json(['error' => 'Category not found'], 404);
+            }
+
+            $category->delete();
+
+            return response()->json(['message' => 'Category deleted']);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while deleting the category',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $category->delete();
-        return response()->json(['message' => 'Category deleted']);
     }
 }

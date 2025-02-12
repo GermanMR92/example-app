@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -15,34 +16,69 @@ class ProductController extends Controller
 
     function store(StoreProductRequest $request)
     {
-        $product = new Product();
-        $fields = $request->only($product->getFillable());
+        try {
 
-        $product->fill($fields);
-        $product->save();
+            DB::beginTransaction();
 
-        return response()->json([
-            'message' => 'Product created',
-            'product' => $product
-        ]);
+            $product = new Product();
+
+            $fields = $request->only($product->getFillable());
+            $product->fill($fields);
+
+            $product->save();
+
+            $categories = $request->input('categories');
+            if ($categories) {
+                $product->categories()->attach($categories);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Product created',
+                'product' => $product
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'An error occurred while creating the product',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
     function update(StoreProductRequest $request, $id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+            if (!$product) {
+                return response()->json(['error' => 'Product not found'], 404);
+            }
+
+            $fields = $request->only($product->getFillable());
+            $product->fill($fields);
+
+            $product->update();
+
+            $categories = $request->input('categories');
+            if ($categories) {
+                $product->categories()->sync($categories);
+            }
+
+            return response()->json([
+                'message' => 'Product updated',
+                'product' => $product
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'An error occurred while updating the product',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $fields = $request->only($product->getFillable());
-        $product->fill($fields);
-        $product->update();
-
-        return response()->json([
-            'message' => 'Product updated',
-            'product' => $product
-        ]);
     }
 
     function edit($id)
@@ -52,13 +88,23 @@ class ProductController extends Controller
 
     function destroy($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+            if (!$product) {
+                return response()->json(['error' => 'Product not found'], 404);
+            }
+
+            $product->delete();
+            
+            return response()->json(['message' => 'Product deleted']);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'An error occurred while deleting the product',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $product->delete();
-        return response()->json(['message' => 'Product deleted']);
     }
 }

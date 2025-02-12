@@ -23,6 +23,11 @@ class StoreGroupRequest extends FormRequest
             'name.string' => 'The category group name must be a valid text',
             'name.min' => 'The category group name must have at least :min characters',
             'name.max' => 'The category group name cannot exceed :max characters',
+
+            'categories.required' => 'The categories are required.',
+            'categories.array' => 'The categories must be an array.',
+            'categories.*.exists' => 'One or more categories are invalid.'
+            
         ];
     }
 
@@ -35,6 +40,8 @@ class StoreGroupRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:50',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id'
         ];
     }
 

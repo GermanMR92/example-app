@@ -37,6 +37,10 @@ class StoreProductRequest extends FormRequest
 
             'cta_url.url' => 'The call-to-action URL must be valid.',
             'cta_url.max' => 'The call-to-action URL cannot exceed :max characters.',
+
+            'categories.array' => 'The categories must be an array.',
+            'categories.*.exists' => 'One or more categories are invalid.'
+            
         ];
     }
 
@@ -53,6 +57,8 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'cta_url' => 'nullable|url|max:255',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id'
         ];
     }
 

@@ -10,4 +10,9 @@ class Group extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'group_has_category');
+    }
 }

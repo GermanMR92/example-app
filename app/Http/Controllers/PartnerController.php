@@ -10,45 +10,73 @@ class PartnerController extends Controller
 {
     function store(StorePartnerRequest $request)
     {
-        $partner = new Partner();
-        $fields = $request->only($partner->getFillable());
+        try {
+            $partner = new Partner();
 
-        $partner->fill($fields);
-        $partner->save();
+            $fields = $request->only($partner->getFillable());
+            $partner->fill($fields);
 
-        return response()->json([
-            'message' => 'Partner created',
-            'partner' => $partner
-        ]);
+            $partner->save();
+
+            return response()->json([
+                'message' => 'Partner created',
+                'partner' => $partner
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'An error occurred while creating the partner',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
     function update(StorePartnerRequest $request, $id)
     {
-        $partner = Partner::find($id);
+        try {
+            $partner = Partner::findOrFail($id);
 
-        if (!$partner) {
-            return response()->json(['error' => 'partner not found'], 404);
+            if (!$partner) {
+                return response()->json(['error' => 'partner not found'], 404);
+            }
+    
+            $fields = $request->only($partner->getFillable());
+            $partner->fill($fields);
+
+            $partner->update();
+    
+            return response()->json([
+                'message' => 'Partner updated',
+                'partner' => $partner
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while updating the partner',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $fields = $request->only($partner->getFillable());
-        $partner->fill($fields);
-        $partner->update();
-
-        return response()->json([
-            'message' => 'Partner updated',
-            'partner' => $partner
-        ]);
     }
 
     function destroy($id)
     {
-        $partner = Partner::find($id);
+        try {
+            $partner = Partner::findOrFail($id);
 
-        if (!$partner) {
-            return response()->json(['error' => 'Partner not found'], 404);
+            if (!$partner) {
+                return response()->json(['error' => 'Partner not found'], 404);
+            }
+
+            $partner->delete();
+            return response()->json(['message' => 'Partner deleted']);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => 'An error occurred while deleting the partner',
+                'details' => $e->getMessage()
+            ], 500);
         }
-
-        $partner->delete();
-        return response()->json(['message' => 'Partner deleted']);
     }
 }
