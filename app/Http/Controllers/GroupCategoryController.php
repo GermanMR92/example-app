@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGroupRequest;
 use App\Models\Group;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,6 +92,32 @@ class GroupCategoryController extends Controller
 
             return response()->json([
                 'error' => 'An error occurred while deleting the group',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Generate a JSON with the products of the categories associated to the group
+    function getGroupProducts($id)
+    {
+        try {
+
+            $group = Group::findOrFail($id);
+
+            if (!$group) {
+                return response()->json(['error' => 'Partner not found'], 404);
+            }
+
+            $products = Product::whereHas('categories', function ($query) use ($group) {
+                $query->whereIn('category_id', $group->categories()->pluck('categories.id'));
+            })->get();
+
+
+            return response()->json($products);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while generating JSON',
                 'details' => $e->getMessage()
             ], 500);
         }

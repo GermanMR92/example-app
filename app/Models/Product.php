@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'product_has_category');
     }
+
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class, 'product_has_category', 'product_id', 'category_id');
+    // }
 }

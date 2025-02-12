@@ -33,6 +33,7 @@ Route::prefix('partners')->group(function () {
     Route::post('/update/{id}', [PartnerController::class, 'update']);
     // Route::get('/edit/{id}', [PartnerController::class, 'edit']);
     Route::delete('destroy/{id}', [PartnerController::class, 'destroy']);
+    Route::get('/{id}/products', [PartnerController::class, 'getPartnerProducts']);
 });
 
 Route::prefix('groups')->group(function () {
@@ -41,4 +42,5 @@ Route::prefix('groups')->group(function () {
     Route::post('/update/{id}', [GroupCategoryController::class, 'update']);
     // Route::get('/edit/{id}', [GroupCategoryController::class, 'edit']);
     Route::delete('destroy/{id}', [GroupCategoryController::class, 'destroy']);
+    Route::get('/{id}/products', [GroupCategoryController::class, 'getGroupProducts']);
 });

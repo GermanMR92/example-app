@@ -11,4 +11,14 @@ class Category extends Model
         'name',
         'description'
     ];
+
+    public function partners()
+    {
+        return $this->belongsToMany(Partner::class, 'partner_has_category', 'category_id', 'partner_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product__has_category', 'category_id', 'product_id');
+    }
 }

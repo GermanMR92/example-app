@@ -29,6 +29,10 @@ class StorePartnerRequest extends FormRequest
             'email.email' => 'The email must be a valid email address',
             'email.max' => 'The email cannot exceed :max characters',
             'email.unique' => 'This email is already taken',
+
+            'categories.required' => 'The categories are required.',
+            'categories.array' => 'The categories must be an array.',
+            'categories.*.exists' => 'One or more categories are invalid.'
         ];
     }
 
@@ -47,6 +51,8 @@ class StorePartnerRequest extends FormRequest
                 'max:255',
                 Rule::unique('partners', 'email')->ignore($this->route('id')), // ignore the current partner
             ],
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id'
         ];
     }
 

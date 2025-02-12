@@ -40,7 +40,7 @@ class StoreGroupRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:50',
-            'categories' => 'array',
+            'categories' => 'required|array',
             'categories.*' => 'exists:categories,id'
         ];
     }

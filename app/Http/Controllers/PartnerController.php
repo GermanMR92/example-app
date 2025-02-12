@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePartnerRequest;
 use App\Models\Partner;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PartnerController extends Controller
@@ -17,6 +18,11 @@ class PartnerController extends Controller
             $partner->fill($fields);
 
             $partner->save();
+
+            $categories = $request->input('categories');
+            if ($categories) {
+                $partner->categories()->attach($categories);
+            }
 
             return response()->json([
                 'message' => 'Partner created',
@@ -45,6 +51,11 @@ class PartnerController extends Controller
             $partner->fill($fields);
 
             $partner->update();
+
+            $categories = $request->input('categories');
+            if ($categories) {
+                $partner->categories()->sync($categories);
+            }
     
             return response()->json([
                 'message' => 'Partner updated',
@@ -75,6 +86,32 @@ class PartnerController extends Controller
 
             return response()->json([
                 'error' => 'An error occurred while deleting the partner',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Generate a JSON with the products of the categories associated to the partner
+    function getPartnerProducts($id)
+    {
+        try {
+
+            $partner = Partner::findOrFail($id);
+
+            if (!$partner) {
+                return response()->json(['error' => 'Partner not found'], 404);
+            }
+
+            $products = Product::whereHas('categories', function ($query) use ($partner) {
+                $query->whereIn('category_id', $partner->categories()->pluck('categories.id'));
+            })->get();
+
+
+            return response()->json($products);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while generating JSON',
                 'details' => $e->getMessage()
             ], 500);
         }
