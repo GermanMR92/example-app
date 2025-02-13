@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+    function new()
+    {
+        return inertia('categories/Create');
+    }
+
     function store(StoreCategoryRequest $request)
     {
         try {
@@ -18,10 +24,7 @@ class CategoryController extends Controller
 
             $category->save();
 
-            return response()->json([
-                'message' => 'Category created',
-                'category' => $category
-            ]);
+            return redirect('/')->with('success', 'Category created');
 
         } catch (\Exception $e) {
             return response()->json([
@@ -45,10 +48,7 @@ class CategoryController extends Controller
 
             $category->update();
 
-            return response()->json([
-                'message' => 'category updated',
-                'category' => $category
-            ]);
+            return redirect('/')->with('success', 'Category updated');
 
         } catch (\Exception $e) {
             return response()->json([
@@ -56,6 +56,15 @@ class CategoryController extends Controller
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+
+    function edit($id)
+    {
+        $category = Category::find($id);
+        return inertia('categories/Edit', [
+            'category' => $category
+        ]);
+
     }
 
     function destroy($id)
@@ -69,7 +78,7 @@ class CategoryController extends Controller
 
             $category->delete();
 
-            return response()->json(['message' => 'Category deleted']);
+            return redirect('/')->with('message', 'Category deleted');
 
         } catch (\Exception $e) {
             return response()->json([

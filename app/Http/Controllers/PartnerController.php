@@ -80,7 +80,8 @@ class PartnerController extends Controller
             }
 
             $partner->delete();
-            return response()->json(['message' => 'Partner deleted']);
+
+            return redirect('/')->with('message', 'Partner deleted');
 
         } catch (\Exception $e) {
 

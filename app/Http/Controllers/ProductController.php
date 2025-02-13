@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,10 @@ class ProductController extends Controller
 {
     function new()
     {
-        echo 'new from ProductController'; // TODO: retornar vista form con method
+        $categories = Category::all();
+        return inertia('products/Create', [
+            'categories' => $categories
+        ]);
     }
 
     function store(StoreProductRequest $request)
@@ -34,10 +38,11 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'message' => 'Product created',
-                'product' => $product
-            ]);
+            return redirect('/')->with('success', 'Product created');
+            // return response()->json([
+            //     'message' => 'Product created',
+            //     'product' => $product
+            // ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -67,10 +72,11 @@ class ProductController extends Controller
                 $product->categories()->sync($categories);
             }
 
-            return response()->json([
-                'message' => 'Product updated',
-                'product' => $product
-            ]);
+            return redirect('/')->with('success', 'Product updated');
+            // return response()->json([
+            //     'message' => 'Product updated',
+            //     'product' => $product
+            // ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -83,7 +89,13 @@ class ProductController extends Controller
 
     function edit($id)
     {
-        echo 'edit from ProductController'; // TODO: retornar vista form con method
+        $product = Product::find($id)->load('categories');
+        $categories = Category::all();
+
+        return inertia('products/Edit', [
+            'product' => $product,
+            'categories' => $categories
+        ]);
     }
 
     function destroy($id)
@@ -97,7 +109,7 @@ class ProductController extends Controller
 
             $product->delete();
             
-            return response()->json(['message' => 'Product deleted']);
+            return redirect('/')->with('message', 'Product deleted');
 
         } catch (\Exception $e) {
 

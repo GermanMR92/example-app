@@ -86,7 +86,8 @@ class GroupCategoryController extends Controller
             }
 
             $group->delete();
-            return response()->json(['message' => 'Category group deleted']);
+
+            return redirect('/')->with('message', 'Category group deleted');
 
         } catch (\Exception $e) {
 
@@ -105,7 +106,7 @@ class GroupCategoryController extends Controller
             $group = Group::findOrFail($id);
 
             if (!$group) {
-                return response()->json(['error' => 'Partner not found'], 404);
+                return response()->json(['error' => 'Category group not found'], 404);
             }
 
             $products = Product::whereHas('categories', function ($query) use ($group) {
