@@ -17,10 +17,10 @@ class StoreGroupRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The category group name is required',
-            'name.string' => 'The category group name must be a valid text',
-            'name.min' => 'The category group name must have at least :min characters',
-            'name.max' => 'The category group name cannot exceed :max characters',
+            'name.required' => 'The category group title is required',
+            'name.string' => 'The category group title must be a valid text',
+            'name.min' => 'The category group title must have at least :min characters',
+            'name.max' => 'The category group title cannot exceed :max characters',
 
             'categories.required' => 'The categories are required.',
             'categories.array' => 'The categories must be an array.',

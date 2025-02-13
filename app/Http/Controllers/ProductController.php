@@ -31,6 +31,10 @@ class ProductController extends Controller
 
             $product->save();
 
+            if($request->hasFile('image_url')) {
+                $this->storeImage($request, $product);
+            }
+
             $categories = $request->input('categories');
             if ($categories) {
                 $product->categories()->attach($categories);
@@ -39,10 +43,6 @@ class ProductController extends Controller
             DB::commit();
 
             return redirect('/')->with('success', 'Product created');
-            // return response()->json([
-            //     'message' => 'Product created',
-            //     'product' => $product
-            // ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -64,6 +64,10 @@ class ProductController extends Controller
 
             $fields = $request->only($product->getFillable());
             $product->fill($fields);
+
+            if($request->hasFile('image_url')) {
+                $this->storeImage($request, $product);
+            }
 
             $product->update();
 
@@ -119,4 +123,40 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    // funcion que almacena una imagen en el servidor en la ruta http://localhost:8000/assets/imgs/products/id
+    // function storeImage(Request $request, $product)
+    // {
+    //     $image = $request->file('image_url');
+    //     $imageName = time() . '.' . $image->extension();
+    //     $image->move(public_path('assets/imgs/products/' . $product->id), $imageName);
+
+    //     $product->image_url = $imageName;
+    //     $product->update();
+    // }
+
+    // funcion que almacena una imagen en el servidor en la ruta http://localhost:8000/assets/imgs/products/id
+    // function storeImage($request, $product)
+    // {
+    //     $image = $request->file('image_url');
+    //     $imageName = $product->id . '.' . $image->extension();
+    //     $image->move(public_path('assets/imgs/products/'), $imageName);
+
+    //     $product->image_url = $imageName;
+    //     $product->update();
+    // }
+
+    function storeImage($request, $product)
+    {
+        $image = $request->file('image_url');
+        $imageName = $product->id . '.' . $image->extension();
+        $imagePath = 'assets/imgs/products/' . $imageName;
+        
+        $image->move(public_path('assets/imgs/products/'), $imageName);
+        
+        $product->image_url = url($imagePath); // Guarda la URL completa
+        $product->update();
+    }
 }
+
+// assets/imgs/products/id

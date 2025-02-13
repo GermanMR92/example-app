@@ -35,6 +35,7 @@ export default function Home({ products, categories, partners, groups }) {
                 <table className="table">
                     <thead>
                         <tr>
+                            <th>Image</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Price</th>
@@ -45,6 +46,13 @@ export default function Home({ products, categories, partners, groups }) {
                     <tbody>
                         {products.map(product => (
                             <tr key={product.id}>
+                                <td>
+                                    {product.image_url ? (
+                                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover" />
+                                    ) : (
+                                        <span>No img</span>
+                                    )}
+                                </td>
                                 <td>{product.name}</td>
                                 <td>{product.description}</td>
                                 <td>{product.price}€</td>
@@ -112,13 +120,9 @@ export default function Home({ products, categories, partners, groups }) {
                                 <td>{partner.name}</td>
                                 <td>{partner.email}</td>
                                 <td>
-                                    <button
-                                        className="button is-danger"
-                                        // onClick={() => router.route('products.delete', product.id)}
-                                        onClick={() => console.log('products.delete', partner.id)}
-                                    >
+                                    <Link href={`/partners/edit/${partner.id}`}>
                                         <i className="material-icons-outlined">edit</i>
-                                    </button>
+                                    </Link>
                                     <button
                                         className="button is-primary"
                                         onClick={() => onDelete('partners', partner.id)}
@@ -145,13 +149,9 @@ export default function Home({ products, categories, partners, groups }) {
                             <tr key={group.id}>
                                 <td>{group.name}</td>
                                 <td>
-                                    <button
-                                        className="button is-danger"
-                                        // onClick={() => router.route('products.delete', product.id)}
-                                        onClick={() => console.log('products.delete', group.id)}
-                                    >
+                                    <Link href={`/groups/edit/${group.id}`}>
                                         <i className="material-icons-outlined">edit</i>
-                                    </button>
+                                    </Link>
                                     <button
                                         className="button is-primary"
                                         onClick={() => onDelete('groups', group.id)}

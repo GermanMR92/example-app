@@ -3,14 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePartnerRequest;
+use App\Models\Category;
 use App\Models\Partner;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PartnerController extends Controller
 {
+    function new()
+    {
+        $categories = Category::all();
+        return inertia('partners/Create', [
+            'categories' => $categories
+        ]);
+    }
+
     function store(StorePartnerRequest $request)
     {
+        // dd($request->all());
         try {
             $partner = new Partner();
 
@@ -24,10 +34,7 @@ class PartnerController extends Controller
                 $partner->categories()->attach($categories);
             }
 
-            return response()->json([
-                'message' => 'Partner created',
-                'partner' => $partner
-            ]);
+            return redirect('/')->with('success', 'Partner created');
 
         } catch (\Exception $e) {
 
@@ -57,10 +64,7 @@ class PartnerController extends Controller
                 $partner->categories()->sync($categories);
             }
     
-            return response()->json([
-                'message' => 'Partner updated',
-                'partner' => $partner
-            ]);
+            return redirect('/')->with('success', 'Partner updated');
 
         } catch (\Exception $e) {
             return response()->json([
@@ -68,6 +72,16 @@ class PartnerController extends Controller
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+
+    function edit($id)
+    {
+        $partner = Partner::find($id)->load('categories');
+        $categories = Category::all();
+        return inertia('partners/Edit', [
+            'partner' => $partner,
+            'categories' => $categories
+        ]);
     }
 
     function destroy($id)

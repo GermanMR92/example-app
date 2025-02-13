@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGroupRequest;
+use App\Models\Category;
 use App\Models\Group;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -10,10 +11,18 @@ use Illuminate\Support\Facades\DB;
 
 class GroupCategoryController extends Controller
 {
+
+    function new()
+    {
+        $categories = Category::all();
+        return inertia('groups/Create', [
+            'categories' => $categories
+        ]);
+    }
+
     function store(StoreGroupRequest $request)
     {
         try {
-
             DB::beginTransaction();
 
             $group = new Group();
@@ -30,10 +39,7 @@ class GroupCategoryController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'message' => 'Category group created',
-                'group' => $group
-            ]);
+            return redirect('/')->with('success', 'Category group created');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -63,10 +69,7 @@ class GroupCategoryController extends Controller
                 $group->categories()->sync($categories);
             }
 
-            return response()->json([
-                'message' => 'Category group updated',
-                'group' => $group
-            ]);
+            return redirect('/')->with('success', 'Category group updated');
 
         } catch (\Exception $e) {
             return response()->json([
@@ -74,6 +77,17 @@ class GroupCategoryController extends Controller
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+
+    function edit($id)
+    {
+        $group = Group::find($id)->load('categories');
+        $categories = Category::all();
+        return inertia('groups/Edit', [
+            'group' => $group,
+            'categories' => $categories
+        ]);
+
     }
 
     function destroy($id)

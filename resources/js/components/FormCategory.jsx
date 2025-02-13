@@ -1,6 +1,6 @@
 import { useForm } from "@inertiajs/react";
 
-export default function FormProduct({ category, categories }) {
+export default function FormCategory({ category }) {
 
     const { data, setData, post, errors, processing } = useForm({
         name: category ? category.name : '',

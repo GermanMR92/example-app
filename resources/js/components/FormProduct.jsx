@@ -81,7 +81,7 @@ export default function FormProduct({ product, categories }) {
             </div>
 
             {/* Image URL */}
-            <div>
+            {/* <div>
                 <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL</label>
                 <input
                     id="image_url"
@@ -90,6 +90,19 @@ export default function FormProduct({ product, categories }) {
                     value={data.image_url}
                     className={`w-full px-4 py-2 border rounded-lg focus:outline-none ${errors.image_url ? 'border-red-500' : 'border-gray-300'}`}
                     onChange={(e) => setData('image_url', e.target.value)}
+                />
+                {errors.image_url && <p className="text-sm text-red-500">{errors.image_url}</p>}
+            </div> */}
+
+            {/* Image */}
+            <div>
+                <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL</label>
+                <input
+                    id="image_url"
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none ${errors.image_url ? 'border-red-500' : 'border-gray-300'}`}
+                    onChange={(e) => setData('image_url', e.target.files[0])}
                 />
                 {errors.image_url && <p className="text-sm text-red-500">{errors.image_url}</p>}
             </div>
