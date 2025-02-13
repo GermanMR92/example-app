@@ -77,10 +77,6 @@ class ProductController extends Controller
             }
 
             return redirect('/')->with('success', 'Product updated');
-            // return response()->json([
-            //     'message' => 'Product updated',
-            //     'product' => $product
-            // ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -123,28 +119,6 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-    // funcion que almacena una imagen en el servidor en la ruta http://localhost:8000/assets/imgs/products/id
-    // function storeImage(Request $request, $product)
-    // {
-    //     $image = $request->file('image_url');
-    //     $imageName = time() . '.' . $image->extension();
-    //     $image->move(public_path('assets/imgs/products/' . $product->id), $imageName);
-
-    //     $product->image_url = $imageName;
-    //     $product->update();
-    // }
-
-    // funcion que almacena una imagen en el servidor en la ruta http://localhost:8000/assets/imgs/products/id
-    // function storeImage($request, $product)
-    // {
-    //     $image = $request->file('image_url');
-    //     $imageName = $product->id . '.' . $image->extension();
-    //     $image->move(public_path('assets/imgs/products/'), $imageName);
-
-    //     $product->image_url = $imageName;
-    //     $product->update();
-    // }
 
     function storeImage($request, $product)
     {
