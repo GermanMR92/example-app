@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { router } from "@inertiajs/react";
 import { useForm, usePage, Link } from "@inertiajs/react";
 
 export default function Home({ products, categories, partners, groups }) {
@@ -107,6 +105,7 @@ export default function Home({ products, categories, partners, groups }) {
 
             <h2 className="subtitle">Partners</h2>
             <div className="mb-12 mt-3">
+                <small className="flex justify-end text-gray-600">Click on the download icon to view the JSON of products associated with the partner.</small>
                 <table className="table">
                     <thead>
                         <tr>
@@ -129,6 +128,9 @@ export default function Home({ products, categories, partners, groups }) {
                                     >
                                         <i className="material-icons-outlined text-red-500">delete</i>
                                     </button>
+                                    <a href={`/partners/${partner.id}/products`} target="_blank">
+                                        <i className="material-icons-outlined">sim_card_download</i>
+                                    </a>
                                 </td>
                             </tr>
                         ))}
@@ -138,6 +140,7 @@ export default function Home({ products, categories, partners, groups }) {
 
             <h2 className="subtitle">Groups</h2>
             <div className="mb-12 mt-3">
+                <small className="flex justify-end text-gray-600">Click on the download icon to view the JSON of products associated with the category group.</small>
                 <table className="table">
                     <thead>
                         <tr>
@@ -158,6 +161,9 @@ export default function Home({ products, categories, partners, groups }) {
                                     >
                                         <i className="material-icons-outlined text-red-500">delete</i>
                                     </button>
+                                    <a href={`/groups/${group.id}/products`} target="_blank">
+                                        <i className="material-icons-outlined">sim_card_download</i>
+                                    </a>
                                 </td>
                             </tr>
                         ))}
