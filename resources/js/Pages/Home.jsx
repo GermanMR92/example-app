@@ -34,8 +34,8 @@ export default function Home({ products, categories, partners, groups }) {
 
             <TableProductos products={products} onDelete={onDelete} />
             <TableCategories categories={categories} onDelete={onDelete} />
-            <TablePartners partners={partners} onDelete={onDelete} />
             <TableGroups groups={groups} onDelete={onDelete} />
+            <TablePartners partners={partners} onDelete={onDelete} />
             
         </div>
     );
