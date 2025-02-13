@@ -1,4 +1,8 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
+import TableCategories from "@/components/tables/tableCategories";
+import TableProductos from "@/components/tables/TableProducts";
+import TablePartners from "@/components/tables/TablePartners";
+import TableGroups from "@/components/tables/TableGroups";
 
 export default function Home({ products, categories, partners, groups }) {
 
@@ -28,148 +32,11 @@ export default function Home({ products, categories, partners, groups }) {
                 </div>
             }
 
-            <h2 className="subtitle">Products</h2>
-            <div className="mb-12 mt-3">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products.map(product => (
-                            <tr key={product.id}>
-                                <td>
-                                    {product.image_url ? (
-                                        <img src={product.image_url} alt={product.name} className="w-10 h-10 object-cover" />
-                                    ) : (
-                                        <span>No img</span>
-                                    )}
-                                </td>
-                                <td>{product.name}</td>
-                                <td>{product.description}</td>
-                                <td>{product.price}€</td>
-                                <td>{product.stock}ud</td>
-                                <td>
-                                    <Link href={`/products/edit/${product.id}`}>
-                                        <i className="material-icons-outlined">edit</i>
-                                    </Link>
-                                    <button
-                                        className="button is-primary"
-                                        onClick={() => onDelete('products', product.id)}
-                                    >
-                                        <i className="material-icons-outlined text-red-500">delete</i>
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2 className="subtitle">Categories</h2>
-            <div className="mb-12 mt-3">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {categories.map(category => (
-                            <tr key={category.id}>
-                                <td>{category.name}</td>
-                                <td>{category.description}</td>
-                                <td>
-                                    <Link href={`/categories/edit/${category.id}`}>
-                                        <i className="material-icons-outlined">edit</i>
-                                    </Link>
-                                    <button
-                                        className="button is-primary"
-                                        onClick={() => onDelete('categories', category.id)}
-                                    >
-                                        <i className="material-icons-outlined text-red-500">delete</i>
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2 className="subtitle">Partners</h2>
-            <div className="mb-12 mt-3">
-                <small className="flex justify-end text-gray-600">Click on the download icon to view the JSON of products associated with the partner.</small>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {partners.map(partner => (
-                            <tr key={partner.id}>
-                                <td>{partner.name}</td>
-                                <td>{partner.email}</td>
-                                <td>
-                                    <Link href={`/partners/edit/${partner.id}`}>
-                                        <i className="material-icons-outlined">edit</i>
-                                    </Link>
-                                    <button
-                                        className="button is-primary"
-                                        onClick={() => onDelete('partners', partner.id)}
-                                    >
-                                        <i className="material-icons-outlined text-red-500">delete</i>
-                                    </button>
-                                    <a href={`/partners/${partner.id}/products`} target="_blank">
-                                        <i className="material-icons-outlined">sim_card_download</i>
-                                    </a>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            <h2 className="subtitle">Groups</h2>
-            <div className="mb-12 mt-3">
-                <small className="flex justify-end text-gray-600">Click on the download icon to view the JSON of products associated with the category group.</small>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {groups.map(group => (
-                            <tr key={group.id}>
-                                <td>{group.name}</td>
-                                <td>
-                                    <Link href={`/groups/edit/${group.id}`}>
-                                        <i className="material-icons-outlined">edit</i>
-                                    </Link>
-                                    <button
-                                        className="button is-primary"
-                                        onClick={() => onDelete('groups', group.id)}
-                                    >
-                                        <i className="material-icons-outlined text-red-500">delete</i>
-                                    </button>
-                                    <a href={`/groups/${group.id}/products`} target="_blank">
-                                        <i className="material-icons-outlined">sim_card_download</i>
-                                    </a>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <TableProductos products={products} onDelete={onDelete} />
+            <TableCategories categories={categories} onDelete={onDelete} />
+            <TablePartners partners={partners} onDelete={onDelete} />
+            <TableGroups groups={groups} onDelete={onDelete} />
+            
         </div>
     );
 }
